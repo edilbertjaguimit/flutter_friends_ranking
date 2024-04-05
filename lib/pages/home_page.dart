@@ -11,9 +11,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Person> personList = [
-    const Person(imageUrl: 'assets/My ID.jpg', name: 'Edilbert Cute', rank: 1),
-    const Person(imageUrl: 'assets/boy 1.png', name: 'Jericho', rank: 2),
-    const Person(imageUrl: 'assets/girl 1.png', name: 'Keren', rank: 3),
+    const Person(imageUrl: 'assets/My ID.jpg', name: 'Edilbert Cute'),
+    const Person(imageUrl: 'assets/boy 1.png', name: 'Jericho'),
+    const Person(imageUrl: 'assets/girl 1.png', name: 'Keren'),
   ];
 
   @override

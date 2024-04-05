@@ -24,7 +24,7 @@ class PersonCard extends StatelessWidget {
               fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          'Rank ${person.rank}',
+          'Rank ${index + 1}',
           style: TextStyle(fontSize: 18, color: Colors.white),
         ),
         // isThreeLine: true,
@@ -44,7 +44,7 @@ class PersonCard extends StatelessWidget {
           Navigator.pushNamed(context, 'personDetails', arguments: {
             'imageUrl': person.imageUrl,
             'name': person.name,
-            'rank': person.rank,
+            'rank': index + 1,
           });
         },
         shape: RoundedRectangleBorder(
