@@ -1,6 +1,12 @@
+import 'dart:typed_data';
+
 class Person {
-  final String imageUrl;
   final String name;
-  // final int rank;
-  const Person({required this.imageUrl, required this.name});
+  final Uint8List? image;
+  final String? defaultImage;
+
+  Person(
+      {required this.name,
+      this.image,
+      this.defaultImage = 'assets/default profile.jpg'});
 }

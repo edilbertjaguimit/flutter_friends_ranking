@@ -1,10 +1,15 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_friends_ranking/components/form.dart';
 import 'package:flutter_friends_ranking/components/person_card.dart';
 import 'package:flutter_friends_ranking/components/toast.dart';
 import 'package:flutter_friends_ranking/model/person_list.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,12 +20,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Uint8List? _image;
+  File? selectedImage;
   FToast? fToast;
   @override
   void initState() {
     super.initState();
     fToast = FToast();
     fToast!.init(context);
+  }
+
+  Future _pinckImageFromGallery() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returnImage == null) return;
+    setState(() {
+      selectedImage = File(returnImage.path);
+      _image = File(returnImage.path).readAsBytesSync();
+    });
   }
 
   TextEditingController friendName = TextEditingController();
@@ -51,9 +68,10 @@ class _HomePageState extends State<HomePage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                TextField(
-                  controller: friendName,
-                  decoration: InputDecoration(),
+                FormSettings(
+                  image: _image,
+                  friendName: friendName,
+                  onTap: () => _pinckImageFromGallery(),
                 ),
               ],
             ),
@@ -70,18 +88,23 @@ class _HomePageState extends State<HomePage> {
                     // personList.personList();
                     context
                         .read<PersonListModel>()
-                        .addNewPerson(name: friendName.text);
+                        .addNewPerson(name: friendName.text, image: _image);
                   });
                   print(friendName.text);
                   friendName.text = '';
                   Navigator.pop(context);
                   _displayToast();
+                  _image = null;
                 }
               },
               child: const Text('Add'),
             ),
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                Navigator.pop(context);
+                _image = null;
+                friendName.text = '';
+              },
               child: const Text('Cancel'),
             ),
           ],

@@ -65,9 +65,7 @@ class _PersonCardState extends State<PersonCard> {
                   ),
                   Expanded(
                     child: InkWell(
-                      onTap: () {
-                        _pinckImageFromCamera();
-                      },
+                      onTap: () {},
                       child: SizedBox(
                         child: Column(
                           children: [
@@ -99,16 +97,16 @@ class _PersonCardState extends State<PersonCard> {
     Navigator.pop(context);
   }
 
-  Future _pinckImageFromCamera() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (returnImage == null) return;
-    setState(() {
-      selectedImage = File(returnImage.path);
-      _image = File(returnImage.path).readAsBytesSync();
-    });
-    Navigator.pop(context);
-  }
+  // Future _pinckImageFromCamera() async {
+  //   final returnImage =
+  //       await ImagePicker().pickImage(source: ImageSource.camera);
+  //   if (returnImage == null) return;
+  //   setState(() {
+  //     selectedImage = File(returnImage.path);
+  //     _image = File(returnImage.path).readAsBytesSync();
+  //   });
+  //   Navigator.pop(context);
+  // }
 //   Future _pinckImageFromGallery() async {
 //   final returnImage = await ImagePicker().pickImage(source: ImageSource.gallery);
 //   if (returnImage == null) return;
@@ -131,9 +129,10 @@ class _PersonCardState extends State<PersonCard> {
         // dense: true,
         // minVerticalPadding: 5,
         leading: CircleAvatar(
-          backgroundImage: _image != null
-              ? MemoryImage(_image!)
-              : AssetImage(widget.person.imageUrl) as ImageProvider<Object>?,
+          backgroundImage: widget.person.image != null
+              ? MemoryImage(widget.person.image!)
+              : AssetImage(widget.person.defaultImage!)
+                  as ImageProvider<Object>?,
           radius: 25,
         ),
         title: Text(
@@ -186,7 +185,9 @@ class _PersonCardState extends State<PersonCard> {
         onTap: () {
           print(widget.index);
           Navigator.pushNamed(context, 'personDetails', arguments: {
-            'imageUrl': widget.person.imageUrl,
+            'imageUrl':
+                widget.person.image == null ? widget.person.defaultImage : null,
+            'image': widget.person.image,
             'name': widget.person.name,
             'rank': widget.index + 1,
           });

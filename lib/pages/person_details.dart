@@ -46,7 +46,9 @@ class _PersonDetailsState extends State<PersonDetails> {
                     child: Container(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(data['imageUrl']),
+                        child: data['image'] != null
+                            ? Image(image: MemoryImage(data['image']))
+                            : Image(image: AssetImage(data['imageUrl'])),
                       ),
                     ),
                   ),
