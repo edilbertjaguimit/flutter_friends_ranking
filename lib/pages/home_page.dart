@@ -117,9 +117,13 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           _displayAddDialog();
         },
+        backgroundColor: Color(0xff9290c3),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         elevation: 0,
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }
