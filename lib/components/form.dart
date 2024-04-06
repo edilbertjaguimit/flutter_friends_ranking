@@ -34,6 +34,7 @@ class FormSettings extends StatelessWidget {
                         child: Icon(
                           Icons.add_a_photo,
                           size: 20,
+                          color: Colors.white,
                         ),
                       )
                     : Text(''),
@@ -46,7 +47,17 @@ class FormSettings extends StatelessWidget {
           flex: 5,
           child: TextField(
             controller: friendName,
-            decoration: InputDecoration(hintText: 'Friend\'s name'),
+            style: TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              hintText: 'Friend\'s name',
+              hintStyle: TextStyle(color: Colors.white),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),
+            ),
           ),
         ),
       ],

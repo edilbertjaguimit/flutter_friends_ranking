@@ -56,8 +56,14 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          // shape:
+          //     RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          backgroundColor: Color(0xff535c91),
           elevation: 0,
-          title: Text('Add new friend'),
+          title: Text(
+            'Add new friend',
+            style: TextStyle(color: Colors.white),
+          ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -89,7 +95,10 @@ class _HomePageState extends State<HomePage> {
                   _image.value = null;
                 }
               },
-              child: const Text('Add'),
+              child: const Text(
+                'Add',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -97,7 +106,10 @@ class _HomePageState extends State<HomePage> {
                 _image.value = null;
                 friendName.text = '';
               },
-              child: const Text('Cancel'),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         );
@@ -132,7 +144,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           _displayAddDialog();
         },
-        backgroundColor: Color(0xff9290c3),
+        backgroundColor: Color(0xff535c91),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         elevation: 0,
         child: const Icon(

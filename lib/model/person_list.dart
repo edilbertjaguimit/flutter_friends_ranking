@@ -20,4 +20,10 @@ class PersonListModel extends ChangeNotifier {
     persons.removeAt(index);
     notifyListeners();
   }
+
+  void updatePerson(
+      {required String name, Uint8List? image, required int index}) {
+    persons[index] = Person(name: name, image: image);
+    notifyListeners();
+  }
 }

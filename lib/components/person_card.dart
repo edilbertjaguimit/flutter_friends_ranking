@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_friends_ranking/components/form.dart';
 import 'package:flutter_friends_ranking/model/person.dart';
 import 'package:flutter_friends_ranking/model/person_list.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,8 +18,11 @@ class PersonCard extends StatefulWidget {
 }
 
 class _PersonCardState extends State<PersonCard> {
-  Uint8List? _image;
-  File? selectedImage;
+  // Uint8List? _image;
+  // File? selectedImage;
+  final ValueNotifier<Uint8List?> _image = ValueNotifier<Uint8List?>(null);
+  TextEditingController friendName = TextEditingController();
+
   // File? _image;
   // final picker = ImagePicker();
   // Future getImage() async {
@@ -34,95 +37,77 @@ class _PersonCardState extends State<PersonCard> {
   // }
 
   void _showSettingsPanel(BuildContext context) {
+    // _image = widget.
     showModalBottomSheet(
-        backgroundColor: Color(0xff9290c3),
+        isDismissible: false,
+        elevation: 0,
+        backgroundColor: Color(0xff535c91),
         context: context,
         builder: (context) {
           return SizedBox(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 4.5,
-            child: Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        _pinckImageFromGallery();
-                      },
-                      child: SizedBox(
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.image,
-                              size: 70,
-                            ),
-                            Text('Galery'),
-                          ],
+            height: MediaQuery.of(context).size.height / 5,
+            child: ValueListenableBuilder<Uint8List?>(
+              valueListenable: _image,
+              builder: (context, value, child) {
+                // _image.value = value;
+                friendName.text.isEmpty
+                    ? friendName.text = widget.person.name
+                    : friendName;
+                // widget.person.image != null ? widget.person.image! : value;
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: FormSettings(
+                          image: value ?? widget.person.image,
+                          friendName: friendName,
+                          onTap: () => _pickImageFromGallery(),
                         ),
                       ),
-                    ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ElevatedButton(
+                              onPressed: () {
+                                context.read<PersonListModel>().updatePerson(
+                                      name: friendName.text,
+                                      image: value ?? widget.person.image,
+                                      index: widget.index,
+                                    );
+                                Navigator.pop(context);
+                              },
+                              child: Text('Save')),
+                          SizedBox(width: 10),
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Cancel')),
+                        ],
+                      )
+                    ],
                   ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      child: SizedBox(
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.camera_alt,
-                              size: 70,
-                            ),
-                            Text('Camera'),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
           );
         });
   }
 
-  Future _pinckImageFromGallery() async {
-    final returnImage =
+  Future<void> _pickImageFromGallery() async {
+    final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage == null) return;
-    setState(() {
-      selectedImage = File(returnImage.path);
-      _image = File(returnImage.path).readAsBytesSync();
-    });
-    Navigator.pop(context);
+    if (pickedFile != null) {
+      _image.value = await pickedFile.readAsBytes();
+    }
   }
-
-  // Future _pinckImageFromCamera() async {
-  //   final returnImage =
-  //       await ImagePicker().pickImage(source: ImageSource.camera);
-  //   if (returnImage == null) return;
-  //   setState(() {
-  //     selectedImage = File(returnImage.path);
-  //     _image = File(returnImage.path).readAsBytesSync();
-  //   });
-  //   Navigator.pop(context);
-  // }
-//   Future _pinckImageFromGallery() async {
-//   final returnImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-//   if (returnImage == null) return;
-//   setState(() {
-//     selectedImage = File(returnImage.path);
-//   });
-
-//   // Read image bytes asynchronously
-//   final bytes = await File(returnImage.path).readAsBytes();
-//   setState(() {
-//     _image = bytes;
-//   });
-// }
 
   @override
   Widget build(BuildContext context) {
+    // var personList = context.watch<PersonListModel>().persons;
+
     return Card(
       color: Color(0xff9290c3),
       child: ListTile(
