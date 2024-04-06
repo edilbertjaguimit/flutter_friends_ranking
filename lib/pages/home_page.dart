@@ -20,7 +20,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Uint8List? _image;
+  // Uint8List? _image;
+  final ValueNotifier<Uint8List?> _image = ValueNotifier<Uint8List?>(null);
+
   File? selectedImage;
   FToast? fToast;
   @override
@@ -30,24 +32,15 @@ class _HomePageState extends State<HomePage> {
     fToast!.init(context);
   }
 
-  Future _pinckImageFromGallery() async {
-    final returnImage =
+  Future<void> _pickImageFromGallery() async {
+    final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage == null) return;
-    setState(() {
-      selectedImage = File(returnImage.path);
-      _image = File(returnImage.path).readAsBytesSync();
-    });
+    if (pickedFile != null) {
+      _image.value = await pickedFile.readAsBytes();
+    }
   }
 
   TextEditingController friendName = TextEditingController();
-  // List<Person> personList = [
-  //   const Person(imageUrl: 'assets/My ID.jpg', name: 'Edilbert Cute'),
-  //   const Person(imageUrl: 'assets/boy 1.png', name: 'Jericho'),
-  //   const Person(imageUrl: 'assets/girl 1.png', name: 'Keren'),
-  // ];
-  // PersonListModel personList = PersonListModel();
-
   Future<void> _displayToast() async {
     await Future.delayed(Duration(milliseconds: 100), () {
       fToast!.showToast(
@@ -68,10 +61,15 @@ class _HomePageState extends State<HomePage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                FormSettings(
-                  image: _image,
-                  friendName: friendName,
-                  onTap: () => _pinckImageFromGallery(),
+                ValueListenableBuilder<Uint8List?>(
+                  valueListenable: _image,
+                  builder: (context, value, child) {
+                    return FormSettings(
+                      image: value,
+                      friendName: friendName,
+                      onTap: () => _pickImageFromGallery(),
+                    );
+                  },
                 ),
               ],
             ),
@@ -81,20 +79,14 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 if (friendName.text.isNotEmpty) {
                   setState(() {
-                    // personList.add(Person(
-                    //     imageUrl: 'assets/default profile.jpg',
-                    //     name: friendName.text));
-                    // personList.addNewPerson(friendName.text);
-                    // personList.personList();
-                    context
-                        .read<PersonListModel>()
-                        .addNewPerson(name: friendName.text, image: _image);
+                    context.read<PersonListModel>().addNewPerson(
+                        name: friendName.text, image: _image.value);
                   });
                   print(friendName.text);
                   friendName.text = '';
                   Navigator.pop(context);
                   _displayToast();
-                  _image = null;
+                  _image.value = null;
                 }
               },
               child: const Text('Add'),
@@ -102,7 +94,7 @@ class _HomePageState extends State<HomePage> {
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
-                _image = null;
+                _image.value = null;
                 friendName.text = '';
               },
               child: const Text('Cancel'),

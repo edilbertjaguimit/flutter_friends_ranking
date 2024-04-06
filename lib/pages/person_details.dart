@@ -37,8 +37,7 @@ class _PersonDetailsState extends State<PersonDetails> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(left: 10, top: 10, right: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
             children: [
               Row(
                 children: [
