@@ -3,8 +3,10 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_friends_ranking/components/form.dart';
+import 'package:flutter_friends_ranking/components/toast.dart';
 import 'package:flutter_friends_ranking/model/person.dart';
 import 'package:flutter_friends_ranking/model/person_list.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -18,26 +20,32 @@ class PersonCard extends StatefulWidget {
 }
 
 class _PersonCardState extends State<PersonCard> {
-  // Uint8List? _image;
-  // File? selectedImage;
-  final ValueNotifier<Uint8List?> _image = ValueNotifier<Uint8List?>(null);
-  TextEditingController friendName = TextEditingController();
+  FToast? fToast;
+  @override
+  void initState() {
+    super.initState();
+    fToast = FToast();
+    fToast!.init(context);
+  }
 
-  // File? _image;
-  // final picker = ImagePicker();
-  // Future getImage() async {
-  //   final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-  //   setState(() {
-  //     if (pickedImage != null) {
-  //       _image = File(pickedImage.path);
-  //     } else {
-  //       print('No Image is Picked');
-  //     }
-  //   });
-  // }
+  final ValueNotifier<Uint8List?> _image = ValueNotifier<Uint8List?>(null);
+  // text inputs
+  TextEditingController friendName = TextEditingController();
+  TextEditingController address = TextEditingController();
+  TextEditingController age = TextEditingController();
+  TextEditingController school = TextEditingController();
+
+  Future<void> _displayToast({required String message}) async {
+    await Future.delayed(Duration(milliseconds: 100), () {
+      fToast!.showToast(
+        child: MyToast(message: message),
+        gravity: ToastGravity.BOTTOM,
+        toastDuration: Duration(seconds: 2),
+      );
+    });
+  }
 
   void _showSettingsPanel(BuildContext context) {
-    // _image = widget.
     showModalBottomSheet(
         isDismissible: false,
         elevation: 0,
@@ -46,23 +54,42 @@ class _PersonCardState extends State<PersonCard> {
         builder: (context) {
           return SizedBox(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 5,
+            height: MediaQuery.of(context).size.height / 2.2,
             child: ValueListenableBuilder<Uint8List?>(
               valueListenable: _image,
               builder: (context, value, child) {
-                // _image.value = value;
                 friendName.text.isEmpty
                     ? friendName.text = widget.person.name
                     : friendName;
-                // widget.person.image != null ? widget.person.image! : value;
+                address.text.isEmpty
+                    ? address.text = widget.person.address!
+                    : address;
+                age.text.isEmpty
+                    ? age.text = widget.person.age.toString()
+                    : age;
+                school.text.isEmpty
+                    ? school.text = widget.person.school!
+                    : school;
                 return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                   child: Column(
                     children: [
+                      Text(
+                        'Edit Friend\'s Details',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
                       Expanded(
                         child: FormSettings(
                           image: value ?? widget.person.image,
                           friendName: friendName,
+                          address: address,
+                          age: age,
+                          school: school,
                           onTap: () => _pickImageFromGallery(),
                         ),
                       ),
@@ -71,12 +98,21 @@ class _PersonCardState extends State<PersonCard> {
                         children: [
                           ElevatedButton(
                               onPressed: () {
-                                context.read<PersonListModel>().updatePerson(
-                                      name: friendName.text,
-                                      image: value ?? widget.person.image,
-                                      index: widget.index,
-                                    );
-                                Navigator.pop(context);
+                                if (friendName.text.isNotEmpty) {
+                                  // Update the person details
+                                  context.read<PersonListModel>().updatePerson(
+                                        name: friendName.text,
+                                        address: address.text,
+                                        age: int.parse(age.text),
+                                        school: school.text,
+                                        image: value ?? widget.person.image,
+                                        index: widget.index,
+                                      );
+                                  _displayToast(message: 'Saved Successfully');
+                                  Navigator.pop(context);
+                                } else {
+                                  _displayToast(message: 'Field is required');
+                                }
                               },
                               child: Text('Save')),
                           SizedBox(width: 10),
@@ -174,6 +210,9 @@ class _PersonCardState extends State<PersonCard> {
                 widget.person.image == null ? widget.person.defaultImage : null,
             'image': widget.person.image,
             'name': widget.person.name,
+            'address': widget.person.address,
+            'age': widget.person.age,
+            'school': widget.person.school,
             'rank': widget.index + 1,
           });
         },

@@ -41,10 +41,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   TextEditingController friendName = TextEditingController();
-  Future<void> _displayToast() async {
+  TextEditingController address = TextEditingController();
+  TextEditingController age = TextEditingController();
+  TextEditingController school = TextEditingController();
+  Future<void> _displayToast({required String message}) async {
     await Future.delayed(Duration(milliseconds: 100), () {
       fToast!.showToast(
-        child: MyToast(message: 'Added Successfully'),
+        child: MyToast(message: message),
         gravity: ToastGravity.BOTTOM,
         toastDuration: Duration(seconds: 2),
       );
@@ -73,6 +76,9 @@ class _HomePageState extends State<HomePage> {
                     return FormSettings(
                       image: value,
                       friendName: friendName,
+                      address: address,
+                      age: age,
+                      school: school,
                       onTap: () => _pickImageFromGallery(),
                     );
                   },
@@ -86,13 +92,20 @@ class _HomePageState extends State<HomePage> {
                 if (friendName.text.isNotEmpty) {
                   setState(() {
                     context.read<PersonListModel>().addNewPerson(
-                        name: friendName.text, image: _image.value);
+                          name: friendName.text,
+                          address: address.text,
+                          age: int.parse(age.text),
+                          school: school.text,
+                          image: _image.value,
+                        );
                   });
                   print(friendName.text);
                   friendName.text = '';
                   Navigator.pop(context);
-                  _displayToast();
+                  _displayToast(message: 'Added Successfully');
                   _image.value = null;
+                } else {
+                  _displayToast(message: 'Field is required');
                 }
               },
               child: const Text(

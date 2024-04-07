@@ -28,7 +28,7 @@ class _PersonDetailsState extends State<PersonDetails> {
               color: Colors.white,
             )),
         title: const Text(
-          'Details',
+          'Friend Details',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -58,26 +58,6 @@ class _PersonDetailsState extends State<PersonDetails> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Name:',
-                    style: TextStyle(
-                      fontSize: 20,
-                      // fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(width: 3),
-                  Text(
-                    data['name'],
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
                     'Rank:',
                     style: TextStyle(
                       fontSize: 20,
@@ -90,6 +70,92 @@ class _PersonDetailsState extends State<PersonDetails> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Name:',
+                    style: TextStyle(
+                      fontSize: 20,
+                      // fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 3),
+                  Expanded(
+                    child: Text(
+                      data['name'],
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Address:',
+                    style: TextStyle(
+                      fontSize: 20,
+                      // fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 3),
+                  Expanded(
+                    child: Text(
+                      data['address'],
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Age:',
+                    style: TextStyle(
+                      fontSize: 20,
+                      // fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 3),
+                  Text(
+                    data['age'].toString(),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'School:',
+                    style: TextStyle(
+                      fontSize: 20,
+                      // fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 3),
+                  Expanded(
+                    child: Text(
+                      data['school'],
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],

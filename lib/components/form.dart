@@ -2,16 +2,28 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_friends_ranking/shared/constants.dart';
 
 class FormSettings extends StatelessWidget {
-  const FormSettings({this.image, this.friendName, this.onTap, super.key});
+  const FormSettings(
+      {this.image,
+      this.friendName,
+      this.address,
+      this.age,
+      this.school,
+      this.onTap,
+      super.key});
   final Uint8List? image;
   final Function()? onTap;
   final TextEditingController? friendName;
+  final TextEditingController? address;
+  final TextEditingController? age;
+  final TextEditingController? school;
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: InkWell(
@@ -45,19 +57,41 @@ class FormSettings extends StatelessWidget {
         SizedBox(width: 10),
         Expanded(
           flex: 5,
-          child: TextField(
-            controller: friendName,
-            style: TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              hintText: 'Friend\'s name',
-              hintStyle: TextStyle(color: Colors.white),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
+          child: Column(
+            children: [
+              TextField(
+                controller: friendName,
+                cursorColor: Colors.white,
+                style: TextStyle(color: Colors.white),
+                decoration: textInputDecoration.copyWith(
+                  hintText: 'Friend\'s name',
+                ),
               ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
+              TextField(
+                controller: address,
+                cursorColor: Colors.white,
+                style: TextStyle(color: Colors.white),
+                decoration: textInputDecoration.copyWith(
+                  hintText: 'Friend\'s address',
+                ),
               ),
-            ),
+              TextField(
+                controller: age,
+                cursorColor: Colors.white,
+                style: TextStyle(color: Colors.white),
+                decoration: textInputDecoration.copyWith(
+                  hintText: 'Friend\'s age',
+                ),
+              ),
+              TextField(
+                controller: school,
+                cursorColor: Colors.white,
+                style: TextStyle(color: Colors.white),
+                decoration: textInputDecoration.copyWith(
+                  hintText: 'Friend\'s school',
+                ),
+              ),
+            ],
           ),
         ),
       ],
