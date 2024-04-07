@@ -101,6 +101,9 @@ class _HomePageState extends State<HomePage> {
                   });
                   print(friendName.text);
                   friendName.text = '';
+                  address.text = '';
+                  age.text = '';
+                  school.text = '';
                   Navigator.pop(context);
                   _displayToast(message: 'Added Successfully');
                   _image.value = null;
@@ -118,6 +121,9 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pop(context);
                 _image.value = null;
                 friendName.text = '';
+                address.text = '';
+                age.text = '';
+                school.text = '';
               },
               child: const Text(
                 'Cancel',

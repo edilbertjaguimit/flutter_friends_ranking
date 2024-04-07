@@ -21,7 +21,6 @@ class FriendsRankingApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        // home: HomePage(),
         initialRoute: 'home',
         routes: {
           'home': (context) => HomePage(),
