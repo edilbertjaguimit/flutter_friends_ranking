@@ -162,6 +162,9 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _displayAddDialog();
+          // MaterialPageRoute(
+          //   builder: (context) => PersonDetails(),
+          // );
         },
         backgroundColor: Color(0xff535c91),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
